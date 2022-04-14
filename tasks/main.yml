@@ -66,4 +66,3 @@
        dest: /tmp/lynis.log
   - name: Now check hardened rating against the required one
     command: "/opt/lynis/compliance.sh {{ rat }}"
-
