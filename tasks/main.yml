@@ -1,0 +1,69 @@
+---
+# tasks file for CaC-Lynis
+  - name: Install packages
+    apt:
+      name: "{{ item }}"
+      state: present
+      update-cache: yes
+    with_items:
+      - "libpam-tmpdir"
+      - "apt-listbugs"
+      - "debsecan"
+      - "debsums"
+      - "fail2ban"
+      - "apt-show-versions"
+      - "rkhunter"
+      - "auditd"
+      - "libpam-cracklib"
+      - "apt-listchanges"
+  - name: Make Lynis script directory
+    file:
+      path: /opt/lynis
+      state: directory
+  - name: Copy the configuration files
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      remote_src: "{{ item.remote }}"
+    with_items:
+      - { src: 'sshd_config', dest: '/etc/sshd/sshd_config', remote: 'no' }
+      - { src: 'rkhunter.conf', dest: '/etc/rkhunter.conf', remote: 'no' }
+      - { src: 'limits.conf', dest: '/etc/security/limits.conf', remote: 'no' }
+      - { src: 'login.defs', dest: '/etc/login.defs', remote: 'no' }
+      - { src: 'compliance.sh', dest: '/opt/lynis/compliance.sh', remote: 'no' }
+      - { src: '/etc/fail2ban/fail2ban.conf', dest: '/etc/fail2ban/fail2ban.local', remote: 'yes' }
+  - name: Restart sshd
+    systemd:
+      name: ssh
+      state: restart
+      enabled: yes
+  - name: Change the ownership on the Docker folder
+    file:
+      path: "{{ item.path }}"
+      mode: "{{ item.mode }}"
+      state: "{{ item.state }}"
+    with_items:
+      - { path: '/etc/cron.d', mode: '0700', state: 'directory' }
+      - { path: '/etc/cron.daily', mode: '0700', state: 'directory' }
+      - { path: '/etc/cron.hourly', mode: '0700', state: 'directory' }
+      - { path: '/etc/cron.weekly', mode: '0700', state: 'directory' }
+      - { path: '/etc/cron.monthly', mode: '0700', state: 'directory' }
+      - { path: '/usr/bin/as', mode: '0700', state: 'file' }
+      - { path: '/usr/bin/cc', mode: '0700', state: 'file' }
+      - { path: '/usr/bin/gcc', mode: '0700', state: 'file' }
+      - { path: '/etc/crontab', mode: '0600', state: 'directory' }
+  - name: Scans and reconfigure postfix
+    command: "{{ item }}"
+    with_items:
+        - 'postconf -e disable_vrfy_command=yes'
+        - 'postconf -e smtpd_banner=""'
+        - 'debsecan'
+        - 'rkhunter -q -c'
+        - 'lynis -q audit system'
+  - name: Fetch the lynis log
+    fetch:
+       src: /var/log/lynis.log
+       dest: /tmp/lynis.log
+  - name: Now check hardened rating against the required one
+    command: "/opt/lynis/compliance.sh {{ rat }}"
+
