@@ -13,8 +13,10 @@ The default for **rat** is 70
 
 
     - hosts: servers
-      role: Cac-Lynis
-      rat: 60
+      roles: 
+        - Cac-Lynis
+      vars:
+        rat: 60
 
 # License
 -------
