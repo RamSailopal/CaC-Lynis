@@ -37,7 +37,7 @@
       name: ssh
       state: restart
       enabled: yes
-  - name: Change the ownership on the Docker folder
+  - name: Change the permissions on folders
     file:
       path: "{{ item.path }}"
       mode: "{{ item.mode }}"
