@@ -34,7 +34,7 @@
   - name: Restart sshd
     systemd:
       name: ssh
-      state: restart
+      state: restarted
       enabled: yes
   - name: Change the permissions on folders
     file:
