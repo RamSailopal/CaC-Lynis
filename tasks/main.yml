@@ -50,8 +50,8 @@
       - { path: '/usr/bin/as', mode: '0700', state: 'file' }
       - { path: '/usr/bin/cc', mode: '0700', state: 'file' }
       - { path: '/usr/bin/gcc', mode: '0700', state: 'file' }
-      - { path: '/etc/crontab', mode: '0600', state: 'directory' }
-  - name: Scans and reconfigure postfix
+      - { path: '/etc/crontab', mode: '0600', state: 'file' }
+  - name: Run commands for Compliance
     command: "{{ item }}"
     with_items:
         - 'postconf -e disable_vrfy_command=yes'
