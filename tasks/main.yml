@@ -53,7 +53,7 @@
       - { path: '/usr/bin/cc', mode: '0700', state: 'file' }
       - { path: '/usr/bin/gcc', mode: '0700', state: 'file' }
       - { path: '/etc/crontab', mode: '0600', state: 'file' }
-      - { path: '/opt/lynis/compliance.sh', mode: '0600', state: 'file' }
+      - { path: '/opt/lynis/compliance.sh', mode: '0100', state: 'file' }
   - name: Run commands for Compliance
     command: "{{ item }}"
     with_items:
