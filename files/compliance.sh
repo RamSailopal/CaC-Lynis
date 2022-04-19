@@ -1,3 +1,4 @@
+#!/bin/bash
 if [[ "$1" == "" ]]
 then
 	echo "Please the enter the hardening rating (0-100) that you want to measure against"
