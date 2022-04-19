@@ -15,6 +15,7 @@
       - "auditd"
       - "libpam-cracklib"
       - "apt-listchanges"
+      - "lynis"
   - name: Make Lynis script directory
     file:
       path: /opt/lynis
@@ -31,6 +32,7 @@
       - { src: 'login.defs', dest: '/etc/login.defs', remote: 'no' }
       - { src: 'compliance.sh', dest: '/opt/lynis/compliance.sh', remote: 'no' }
       - { src: '/etc/fail2ban/fail2ban.conf', dest: '/etc/fail2ban/fail2ban.local', remote: 'yes' }
+      - { src: 'issue', dest: '/etc/issue', remote: 'no' }
   - name: Restart sshd
     systemd:
       name: ssh
