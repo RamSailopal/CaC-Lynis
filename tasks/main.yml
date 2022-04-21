@@ -25,7 +25,7 @@
       dest: "{{ item.dest }}"
       remote_src: "{{ item.remote }}"
     with_items:
-      - { src: 'sshd_config', dest: '/etc/sshd/sshd_config', remote: 'no' }
+      - { src: 'sshd_config', dest: '/etc/ssh/sshd_config', remote: 'no' }
       - { src: 'rkhunter.conf', dest: '/etc/rkhunter.conf', remote: 'no' }
       - { src: 'limits.conf', dest: '/etc/security/limits.conf', remote: 'no' }
       - { src: 'login.defs', dest: '/etc/login.defs', remote: 'no' }
