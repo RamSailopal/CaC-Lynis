@@ -7,6 +7,7 @@
       update-cache: yes
     with_items:
       - "libpam-tmpdir"
+      - "apt-listbugs"
       - "debsecan"
       - "debsums"
       - "fail2ban"
@@ -15,7 +16,6 @@
       - "auditd"
       - "libpam-cracklib"
       - "apt-listchanges"
-      - "lynis"
   - name: Make Lynis script directory
     file:
       path: /opt/lynis
@@ -26,19 +26,22 @@
       dest: "{{ item.dest }}"
       remote_src: "{{ item.remote }}"
     with_items:
-      - { src: 'sshd_config', dest: '/etc/ssh/sshd_config', remote: 'no' }
+      - { src: 'sshd_config', dest: '/etc/sshd/sshd_config', remote: 'no' }
       - { src: 'rkhunter.conf', dest: '/etc/rkhunter.conf', remote: 'no' }
       - { src: 'limits.conf', dest: '/etc/security/limits.conf', remote: 'no' }
       - { src: 'login.defs', dest: '/etc/login.defs', remote: 'no' }
       - { src: 'compliance.sh', dest: '/opt/lynis/compliance.sh', remote: 'no' }
       - { src: '/etc/fail2ban/fail2ban.conf', dest: '/etc/fail2ban/fail2ban.local', remote: 'yes' }
-      - { src: 'issue', dest: '/etc/issue', remote: 'no' }
+      - { src: 'audit.rules', dest: '/etc/audit/rules.d/audit.rules', remote: 'no' }
   - name: Restart sshd
     systemd:
-      name: ssh
-      state: restarted
+      name: "{{ item }}"
+      state: restart
       enabled: yes
-  - name: Change the permissions on folders
+    with_items:
+      - "ssh"
+      - "auditd"
+  - name: Change the ownership on the Docker folder
     file:
       path: "{{ item.path }}"
       mode: "{{ item.mode }}"
@@ -52,9 +55,8 @@
       - { path: '/usr/bin/as', mode: '0700', state: 'file' }
       - { path: '/usr/bin/cc', mode: '0700', state: 'file' }
       - { path: '/usr/bin/gcc', mode: '0700', state: 'file' }
-      - { path: '/etc/crontab', mode: '0600', state: 'file' }
-      - { path: '/opt/lynis/compliance.sh', mode: '0100', state: 'file' }
-  - name: Run commands for Compliance
+      - { path: '/etc/crontab', mode: '0600', state: 'directory' }
+  - name: Scans and reconfigure postfix
     command: "{{ item }}"
     with_items:
         - 'postconf -e disable_vrfy_command=yes'
@@ -67,4 +69,4 @@
        src: /var/log/lynis.log
        dest: /tmp/lynis.log
   - name: Now check hardened rating against the required one
-    command: /opt/lynis/compliance.sh "{{ rat }}"
+    command: "/opt/lynis/compliance.sh {{ rat }}"
