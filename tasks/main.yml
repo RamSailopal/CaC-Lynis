@@ -7,7 +7,6 @@
       update-cache: yes
     with_items:
       - "libpam-tmpdir"
-      - "apt-listbugs"
       - "debsecan"
       - "debsums"
       - "fail2ban"
