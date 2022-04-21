@@ -15,6 +15,7 @@
       - "auditd"
       - "libpam-cracklib"
       - "apt-listchanges"
+      - "lynis"
   - name: Make Lynis script directory
     file:
       path: /opt/lynis
