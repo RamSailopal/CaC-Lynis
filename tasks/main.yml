@@ -54,7 +54,7 @@
       - { path: '/usr/bin/as', mode: '0700', state: 'file' }
       - { path: '/usr/bin/cc', mode: '0700', state: 'file' }
       - { path: '/usr/bin/gcc', mode: '0700', state: 'file' }
-      - { path: '/etc/crontab', mode: '0600', state: 'directory' }
+      - { path: '/etc/crontab', mode: '0600', state: 'file' }
   - name: Scans and reconfigure postfix
     command: "{{ item }}"
     with_items:
