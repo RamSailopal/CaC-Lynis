@@ -31,6 +31,7 @@
       - { src: 'limits.conf', dest: '/etc/security/limits.conf', remote: 'no' }
       - { src: 'login.defs', dest: '/etc/login.defs', remote: 'no' }
       - { src: 'compliance.sh', dest: '/opt/lynis/compliance.sh', remote: 'no' }
+      - { src: 'issue', dest: '/etc/issue', remote: 'no' }
       - { src: '/etc/fail2ban/fail2ban.conf', dest: '/etc/fail2ban/fail2ban.local', remote: 'yes' }
       - { src: 'audit.rules', dest: '/etc/audit/rules.d/audit.rules', remote: 'no' }
   - name: Restart sshd
@@ -63,7 +64,7 @@
         - 'postconf -e disable_vrfy_command=yes'
         - 'postconf -e smtpd_banner=""'
         - 'debsecan'
-        - 'rkhunter -q -c'
+        - 'rkhunter -q -sk'
         - 'lynis -q audit system'
   - name: Fetch the lynis log
     fetch:
