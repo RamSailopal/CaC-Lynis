@@ -35,7 +35,6 @@
       - { src: '/etc/fail2ban/fail2ban.conf', dest: '/etc/fail2ban/fail2ban.local', remote: 'yes' }
       - { src: 'audit.rules', dest: '/etc/audit/rules.d/audit.rules', remote: 'no' }
       - { src: 'rkhunter.conf', dest: '/etc/rkhunter.conf', remote: 'no' }
-      - { src: 'rkrun.sh', dest: '/usr/bin/rkrun.sh', remote: 'no' }
   - name: Restart sshd
     systemd:
       name: "{{ item }}"
@@ -60,14 +59,13 @@
       - { path: '/usr/bin/gcc', mode: '0700', state: 'file' }
       - { path: '/etc/crontab', mode: '0600', state: 'file' }
       - { path: '/opt/lynis/compliance.sh', mode: '0700', state: 'file' }
-      - { path: '/usr/bin/rkrun.sh', mode: '0700', state: 'file' }
   - name: Scans and reconfigure postfix
     command: "{{ item }}"
     with_items:
         - 'postconf -e disable_vrfy_command=yes'
         - 'postconf -e smtpd_banner=""'
         - 'debsecan'
-        - '/usr/bin/rkrun.sh'
+        - 'rkhunter --update --propupd -c -sk'
         - 'lynis -q audit system'
   - name: Fetch the lynis log
     fetch:
