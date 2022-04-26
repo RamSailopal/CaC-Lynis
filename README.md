@@ -9,6 +9,8 @@ Ansible role to install Lynis on Ubuntu and configure the server to be as compli
 
 **rat** - Linus returns a hardened rating once it has run and the rat variable will be compared to this rating to determine a success or failure. For example is the actual hardened rating was 70 and rat was set to 80, there will be a failure. Conversely, if the rating was 70 and rat was set to 60, there would be a success. 
 
+**rkpause** The time in minutes, to wait for rkhunter to complete before checking the output log (The reason this has been implemented is due to a hanging bug in Github actions) Default value is 5 minutes.
+
 The default for **rat** is 70
 
 

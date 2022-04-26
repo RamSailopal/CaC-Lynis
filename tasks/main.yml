@@ -67,6 +67,14 @@
         - 'postconf -e disable_vrfy_command=yes'
         - 'postconf -e smtpd_banner=""'
         - 'debsecan'
+  - name: "Run rkhunter in the background"
+    shell: "nohup rkhunter --update --propupd -c -sk > /tmp/rkhunter.log &"
+  - name: "Pause and wait for rkhunter to complete"
+    pause:
+      minutes: "{{ rkpause }}"
+  - name: "Now check rkhunter output and run Lynis"
+    command: "{{ item }}" 
+    with_items:
         - '/usr/local/bin/rkrun.sh'
         - 'lynis -q audit system'
   - name: Fetch the lynis log

@@ -1,3 +1,4 @@
 ---
 # defaults file for CaC-Lynis
 rat: 70
+rkpause: 5
