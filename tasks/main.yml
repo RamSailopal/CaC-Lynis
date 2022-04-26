@@ -31,6 +31,7 @@
       - { src: 'limits.conf', dest: '/etc/security/limits.conf', remote: 'no' }
       - { src: 'login.defs', dest: '/etc/login.defs', remote: 'no' }
       - { src: 'compliance.sh', dest: '/opt/lynis/compliance.sh', remote: 'no' }
+      - { src: 'rkrun.sh', dest: '/usr/local/bin/rkrun.sh', remote: 'no' }
       - { src: 'issue', dest: '/etc/issue', remote: 'no' }
       - { src: '/etc/fail2ban/fail2ban.conf', dest: '/etc/fail2ban/fail2ban.local', remote: 'yes' }
       - { src: 'audit.rules', dest: '/etc/audit/rules.d/audit.rules', remote: 'no' }
@@ -59,6 +60,7 @@
       - { path: '/usr/bin/gcc', mode: '0700', state: 'file' }
       - { path: '/etc/crontab', mode: '0600', state: 'file' }
       - { path: '/opt/lynis/compliance.sh', mode: '0700', state: 'file' }
+      - { path: '/usr/local/bin/rkrun.sh', mode: '0700', state: 'file' }
   - name: Scans and reconfigure postfix
     command: "{{ item }}"
     with_items:
@@ -66,9 +68,7 @@
         - 'postconf -e smtpd_banner=""'
         - 'debsecan'
   - name: Run rkhunter
-    command: 'rkhunter --update --propupd -c -sk'
-    register: resp
-    failed_when: '"No warnings were found while checking the system" not in resp.stdout'
+    script: '/usr/local/bin/rkrun.sh'
   - name: Run Lynis audit
     command: 'lynis -q audit system'
   - name: Fetch the lynis log
