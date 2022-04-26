@@ -65,8 +65,12 @@
         - 'postconf -e disable_vrfy_command=yes'
         - 'postconf -e smtpd_banner=""'
         - 'debsecan'
-        - 'rkhunter --update --propupd -c -sk'
-        - 'lynis -q audit system'
+  - name: Run rkhunter
+    command: 'rkhunter --update --propupd -c -sk'
+    register: resp
+    failed_when: '"No warnings were found while checking the system" not in resp.stdout'
+  - name: Run Lynis audit
+    command: 'lynis -q audit system'
   - name: Fetch the lynis log
     fetch:
        src: /var/log/lynis.log
