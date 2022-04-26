@@ -67,10 +67,8 @@
         - 'postconf -e disable_vrfy_command=yes'
         - 'postconf -e smtpd_banner=""'
         - 'debsecan'
-  - name: Run rkhunter
-    script: '/usr/local/bin/rkrun.sh'
-  - name: Run Lynis audit
-    command: 'lynis -q audit system'
+        - '/usr/local/bin/rkrun.sh'
+        - 'lynis -q audit system'
   - name: Fetch the lynis log
     fetch:
        src: /var/log/lynis.log
