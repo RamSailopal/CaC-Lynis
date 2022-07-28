@@ -35,7 +35,7 @@
       - { src: 'issue', dest: '/etc/issue', remote: 'no' }
       - { src: '/etc/fail2ban/fail2ban.conf', dest: '/etc/fail2ban/fail2ban.local', remote: 'yes' }
       - { src: 'audit.rules', dest: '/etc/audit/rules.d/audit.rules', remote: 'no' }
-      - { src: 'rkhunter.conf', dest: '/etc/rkhunter.conf', remote: 'no' }
+      - { src: 'rkhunter.conf', dest: '/etc/rkhunter.conf', remote: 'no' } 
   - name: Restart sshd
     systemd:
       name: "{{ item }}"
@@ -61,6 +61,8 @@
       - { path: '/etc/crontab', mode: '0600', state: 'file' }
       - { path: '/opt/lynis/compliance.sh', mode: '0700', state: 'file' }
       - { path: '/usr/local/bin/rkrun.sh', mode: '0700', state: 'file' }
+      - { path: '/usr/bin/which', mode: '0700', state: 'file' }
+      - { path: '/usr/bin/which.debianutils', mode: '0700', state: 'file' }
   - name: Scans and reconfigure postfix
     command: "{{ item }}"
     with_items:
