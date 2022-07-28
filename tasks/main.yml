@@ -61,8 +61,6 @@
       - { path: '/etc/crontab', mode: '0600', state: 'file' }
       - { path: '/opt/lynis/compliance.sh', mode: '0700', state: 'file' }
       - { path: '/usr/local/bin/rkrun.sh', mode: '0700', state: 'file' }
-      - { path: '/usr/bin/which', mode: '0700', state: 'file' }
-      - { path: '/usr/bin/which.debianutils', mode: '0700', state: 'file' }
   - name: Scans and reconfigure postfix
     command: "{{ item }}"
     with_items:
