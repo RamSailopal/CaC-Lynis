@@ -44,6 +44,7 @@
     with_items:
       - "ssh"
       - "auditd"
+      - "fail2ban"
   - name: Change the ownership on the Docker folder
     file:
       path: "{{ item.path }}"
